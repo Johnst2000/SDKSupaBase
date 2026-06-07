@@ -53,14 +53,10 @@ SDKSupaBase/
 │           │   ├── colors.xml
 │           │   └── themes.xml
 │           ├── drawable/                     # Iconos y recursos gráficos
-│           └── xml/                          # Reglas de backup
+│           └── xml/                          
 ├── gradle/
-│   ├── libs.versions.toml            # Versiones centralizadas
-│   └── wrapper/
 ├── build.gradle.kts                  # Build raíz
 ├── settings.gradle.kts
-├── generate_documentacion.py         # Script para generar Documentacion_SDKSupaBase.docx
-├── EMULATOR_ADB_FIX.md               # Notas de solución de problemas con emulador
 └── README.md
 ```
 
