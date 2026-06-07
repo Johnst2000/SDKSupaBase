@@ -63,5 +63,6 @@ SDKSupaBase/
 
 ## Capturas de pantalla en ejecución
 
+<img width="794" height="1141" alt="image" src="https://github.com/user-attachments/assets/1bc7a645-09fa-4207-a143-85073dee7970" />
 
 
