@@ -70,8 +70,7 @@ SDKSupaBase/
 │   └── wrapper/
 ├── build.gradle.kts                  # Build raíz
 ├── settings.gradle.kts
-├── generate_documentacion.py         # Script para generar Documentacion_SDKSupaBase.docx
-├── EMULATOR_ADB_FIX.md               # Notas de solución de problemas con emulador
+├── generate_documentacion.py         # Script para generar PRÁCTICA EN CLASE. LISTVIEW GLIDE SUPABASE SDK.docx
 └── README.md
 ```
 
@@ -103,8 +102,6 @@ SDKSupaBase/
 5. Crear o seleccionar un **emulador** (API 26 o superior) o conectar un dispositivo físico con depuración USB habilitada.
 6. Pulsar **Run ▶** (o `Shift + F10`) para compilar e instalar la app.
 7. La app abrirá **MainActivity2** con los filtros de Semestre/Materias y la lista de alumnos.
-
-> Si el emulador presenta problemas de conexión ADB, consultar `EMULATOR_ADB_FIX.md`.
 
 ---
 
@@ -217,11 +214,11 @@ com.uteq.software.app
 
 ---
 
-## Documentación adicional
+## Documentación de la práctica
 
-El informe técnico completo del proyecto se encuentra en:
+El documento de entrega se genera con:
 
-📄 **[Documentacion_SDKSupaBase.docx](./Documentacion_SDKSupaBase.docx)**
+📄 **PRÁCTICA EN CLASE. LISTVIEW GLIDE SUPABASE SDK.docx**
 
 > Si el archivo aún no existe, generarlo ejecutando:
 >
@@ -230,7 +227,7 @@ El informe técnico completo del proyecto se encuentra en:
 > python generate_documentacion.py
 > ```
 
-El script `generate_documentacion.py` compila automáticamente el código fuente, dependencias y descripción del proyecto en un documento Word listo para entrega.
+El script `generate_documentacion.py` compila el código fuente, layouts, configuración y checklist de la rúbrica en el documento Word de la práctica.
 
 ---
 
