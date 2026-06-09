@@ -70,7 +70,6 @@ SDKSupaBase/
 │   └── wrapper/
 ├── build.gradle.kts                  # Build raíz
 ├── settings.gradle.kts
-├── generate_documentacion.py         # Script para generar PRÁCTICA EN CLASE. LISTVIEW GLIDE SUPABASE SDK.docx
 └── README.md
 ```
 
@@ -150,47 +149,9 @@ Las fotos se cargan desde `https://sga.uteq.edu.ec` + ruta almacenada en el camp
 
 ---
 
-## Capturas de pantalla
+## Captura de pantalla en ejecución
 
-> Insertar aquí las capturas del emulador o dispositivo físico.
-
-### Captura 1 — Pantalla principal MainActivity2
-
-![Captura 1 — MainActivity2](docs/capturas/captura_01_mainactivity2.png)
-
-*Vista inicial con logo UTEQ, selector de Semestre, selector de Materias y ListView de alumnos.*
-
----
-
-### Captura 2 — Lista de alumnos con fotos
-
-![Captura 2 — Lista con fotos](docs/capturas/captura_02_lista_fotos.png)
-
-*Ítems personalizados con foto circular (Glide), nombre en mayúsculas, correo y teléfono.*
-
----
-
-### Captura 3 — Filtro por Semestre y Materias
-
-![Captura 3 — Filtros](docs/capturas/captura_03_filtros.png)
-
-*Dropdowns de Semestre y Materias filtrando datos desde Supabase por nivel.*
-
----
-
-### Captura 4 — MainActivity (lista alumnos)
-
-![Captura 4 — MainActivity](docs/capturas/captura_04_mainactivity.png)
-
-*Actividad secundaria con listado de alumnos en formato texto plano.*
-
----
-
-### Captura 5 — Documentación / diseño referencia
-
-![Captura 5 — Documentación](docs/capturas/captura_05_documentacion.png)
-
-*Referencia al proyecto docente ContenedoresUI_Supabase y documentación de la tarea.*
+<img width="873" height="1256" alt="image" src="https://github.com/user-attachments/assets/3ae4cec0-5fb3-4d96-9334-48e1bbf6d957" />
 
 ---
 
@@ -206,35 +167,9 @@ com.uteq.software.app
 
 | Campo | Dato |
 |---|---|
-| **Estudiante** | [Nombre completo del estudiante] |
+| **Estudiante** | Silva Triviño John Jairo |
 | **Carrera** | Ingeniería en Software |
 | **Universidad** | Universidad Técnica Estatal de Quevedo (UTEQ) |
 | **Asignatura** | Aplicaciones Móviles |
 | **Semestre** | 6.º semestre — 2026 |
 
----
-
-## Documentación de la práctica
-
-El documento de entrega se genera con:
-
-📄 **PRÁCTICA EN CLASE. LISTVIEW GLIDE SUPABASE SDK.docx**
-
-> Si el archivo aún no existe, generarlo ejecutando:
->
-> ```bash
-> pip install python-docx
-> python generate_documentacion.py
-> ```
-
-El script `generate_documentacion.py` compila el código fuente, layouts, configuración y checklist de la rúbrica en el documento Word de la práctica.
-
----
-
-## Referencia docente
-
-Proyecto base: **ContenedoresUI_Supabase** — implementación de referencia del docente para contenedores UI con integración Supabase en Android.
-
----
-
-*Proyecto académico — Universidad Técnica Estatal de Quevedo (UTEQ) · Aplicaciones Móviles · 2026*
