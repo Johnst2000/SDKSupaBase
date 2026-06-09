@@ -151,7 +151,7 @@ Las fotos se cargan desde `https://sga.uteq.edu.ec` + ruta almacenada en el camp
 
 ## Captura de pantalla en ejecución
 
-<img width="873" height="1256" alt="image" src="https://github.com/user-attachments/assets/3ae4cec0-5fb3-4d96-9334-48e1bbf6d957" />
+<img width="590" height="956" alt="image" src="https://github.com/user-attachments/assets/8c73fc0e-5702-44c9-b0c9-fc9fa6e690bc" />
 
 ---
 
