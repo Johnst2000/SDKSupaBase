@@ -9,7 +9,7 @@
     android:background="?android:attr/colorBackground"
     tools:context=".Utils.MainActivity">
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
+    <ProgressBar
         android:id="@+id/progressMaterias"
         android:layout_width="48dp"
         android:layout_height="48dp"

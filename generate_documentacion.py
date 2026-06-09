@@ -173,7 +173,7 @@ def build_document() -> Document:
         "Esta aplicación Android demuestra la integración del SDK de Supabase (PostgREST) "
         "con contenedores de interfaz de usuario nativos. El proyecto consulta tablas remotas "
         "de alumnos y materias alojadas en Supabase, presentando los datos en dos pantallas: "
-        "una vista simple con EditText (MainActivity) y una vista avanzada con AutoCompleteTextView "
+        "una vista simple con EditText (MainActivity) y una vista avanzada con Spinner "
         "para filtrar por semestre/materia y ListView personalizado con imágenes (MainActivity2).",
     )
     add_para(doc, "Tecnologías principales:", bold=True)
@@ -181,7 +181,9 @@ def build_document() -> Document:
         "Kotlin + Android SDK (minSdk 26, targetSdk 36)",
         "Supabase Kotlin SDK (BOM 3.6.0) — módulo PostgREST",
         "Kotlinx Serialization para modelos de datos",
-        "Material Design 3 — TextInputLayout con ExposedDropdownMenu",
+        "Material Design 3 — diálogos de error (MaterialAlertDialogBuilder)",
+        "Spinner nativo para semestre y materias (cumplimiento rúbrica UI)",
+        "Credenciales Supabase en local.properties → BuildConfig (sin claves en código fuente)",
         "Glide para carga de imágenes de perfil desde servidor UTEQ",
         "Coroutines (lifecycleScope) para operaciones asíncronas",
     ]
@@ -265,7 +267,7 @@ def build_document() -> Document:
     add_screenshot_placeholder(
         doc,
         "8.3 Filtro por semestre",
-        "Captura del dropdown de semestres (AutoCompleteTextView) desplegado.",
+        "Captura del Spinner de semestres desplegado.",
     )
     add_screenshot_placeholder(
         doc,
@@ -284,9 +286,10 @@ def build_document() -> Document:
         doc,
         "El proyecto SDKSupaBase integra exitosamente el SDK de Supabase en una aplicación Android "
         "nativa, demostrando consultas PostgREST a tablas alumnos y materias con filtrado dinámico "
-        "por nivel/semestre. Se utilizan contenedores UI avanzados (AutoCompleteTextView, ListView "
-        "con adapter personalizado, ConstraintLayout) y buenas prácticas como manejo de errores "
-        "centralizado, coroutines para operaciones de red y serialización Kotlin para los modelos de datos.",
+        "por nivel/semestre. Se utilizan contenedores UI de la rúbrica (Spinner, ListView "
+        "con adapter personalizado, ConstraintLayout, LinearLayout, ImageView, TextView) y buenas prácticas como "
+        "credenciales externas vía BuildConfig, manejo de errores centralizado, coroutines para operaciones de red "
+        "y serialización Kotlin para los modelos de datos.",
     )
     add_para(
         doc,

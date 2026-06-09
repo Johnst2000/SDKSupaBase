@@ -13,59 +13,59 @@
         android:layout_width="268dp"
         android:layout_height="109dp"
         android:layout_marginTop="16dp"
+        android:contentDescription="@string/app_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilSemestre"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/txtLabelSemestre"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/white"
-        android:hint="Semestre"
-        app:hintTextColor="@color/semestre_hint"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Semestre"
+        android:textColor="@color/semestre_hint"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgLogo">
+        app:layout_constraintTop_toBottomOf="@+id/imgLogo" />
 
-        <AutoCompleteTextView
-            android:id="@+id/actvListaNiveles"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:inputType="none"
-            app:dropDownBackgroundTint="@color/white"
-            app:simpleItems="@array/niveles" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilMaterias"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+    <Spinner
+        android:id="@+id/spinnerSemestre"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
         android:background="@color/white"
-        android:hint="Materias"
-        app:hintTextColor="@color/materias_hint"
-        app:layout_constraintEnd_toEndOf="@+id/tilSemestre"
-        app:layout_constraintStart_toStartOf="@+id/tilSemestre"
-        app:layout_constraintTop_toBottomOf="@+id/tilSemestre">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtLabelSemestre" />
 
-        <AutoCompleteTextView
-            android:id="@+id/actvListaMaterias"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:inputType="none"
-            app:dropDownBackgroundTint="@color/white" />
+    <TextView
+        android:id="@+id/txtLabelMaterias"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Materias"
+        android:textColor="@color/materias_hint"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerSemestre" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+    <Spinner
+        android:id="@+id/spinnerMaterias"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtLabelMaterias" />
 
     <ListView
         android:id="@+id/lvAlumnos"
@@ -80,5 +80,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tilMaterias" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerMaterias" />
 </androidx.constraintlayout.widget.ConstraintLayout>

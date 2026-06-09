@@ -29,7 +29,7 @@ class AlumnoAdapter(
         val txtTelefono = view.findViewById<TextView>(R.id.txtTelefono)
         val imgAlumno = view.findViewById<ImageView>(R.id.imgAlumno)
 
-        txtNombre.text = alumno.nombres?.uppercase(Locale.getDefault())
+        txtNombre.text = alumno.nombres.uppercase(Locale.getDefault())
         txtCorreo.text = alumno.correo
         txtTelefono.text = alumno.telefono
 
