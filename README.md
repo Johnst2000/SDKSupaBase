@@ -1,29 +1,8 @@
-# SDK Supabase — Contenedores UI (UTEQ)
+# SDK Supabase - Contenedores UI (UTEQ)
 
-Aplicación Android desarrollada como tarea académica de **Aplicaciones Móviles** (6.º semestre). Consulta la tabla `alumnos` en **Supabase** mediante el SDK oficial (`postgrest-kt`), muestra los registros en un `ListView` personalizado con fotos circulares (Glide) y permite filtrar materias por semestre con `Spinner`.
+Aplicación móvil Android desarrollada como tarea académica de la asignatura **Aplicaciones Móviles**. El proyecto integra el SDK de **Supabase** (PostgREST) para consultar datos de alumnos y materias almacenados en la nube, presentándolos mediante contenedores de interfaz de usuario (spinners, listas personalizadas y vistas de texto).
 
-**Paquete:** `com.uteq.software.app`  
-**Actividad launcher:** `MainActivity2`
-
----
-
-## Tabla de cumplimiento de la rúbrica
-
-| Requisito | Implementación | Archivo(s) |
-|---|---|---|
-| Logo institucional (`ImageView`) | `@drawable/logo` en pantalla principal | `activity_main2.xml` |
-| Dropdown semestre (`Spinner`) | `spinnerSemestre` + array `niveles` | `activity_main2.xml`, `strings.xml`, `MainActivity2.kt` |
-| Dropdown materia (`Spinner`) | `spinnerMaterias` con datos de Supabase | `activity_main2.xml`, `MainActivity2.kt` |
-| Lista alumnos (`ListView`) | `lvAlumnos` | `activity_main2.xml` |
-| Ítem personalizado (foto, nombre, correo, teléfono, iconos) | `item_alumno.xml` + `AlumnoAdapter` | `item_alumno.xml`, `AlumnoAdapter.kt` |
-| SDK Supabase oficial, consulta async | `SupabaseManager.client.from("alumnos").select { … }` en `lifecycleScope` | `SupaBaseManager.kt`, `MainActivity2.kt` |
-| Orden alfabético por `nombres` | `order("nombres", Order.ASCENDING)` | `MainActivity2.kt`, `MainActivity.kt` |
-| Modelo `Alumno` exacto | `id:Int`, `nombres`, `correo`, `telefono`, `foto` (String) | `Alumno.kt` |
-| `AlumnoAdapter extends ArrayAdapter<Alumno>` | Sí, layout `item_alumno` | `AlumnoAdapter.kt` |
-| Glide + `circleCrop()` | URL base SGA + ruta `foto` | `AlumnoAdapter.kt` |
-| Credenciales fuera del código | `local.properties` → `BuildConfig` | `local.properties`, `app/build.gradle.kts`, `SupaBaseManager.kt` |
-| Sin RecyclerView / Compose / Retrofit / Volley / Firebase | No presentes en dependencias ni código | `libs.versions.toml`, proyecto completo |
-| Contenedores UI permitidos | `ConstraintLayout`, `LinearLayout`, `ImageView`, `TextView`, `Spinner`, `ListView` | layouts XML |
+La implementación sigue como referencia el diseño y la lógica del proyecto docente **ContenedoresUI_Supabase**, adaptado al paquete `com.uteq.software.app` con filtros por semestre y materias.
 
 ---
 
@@ -32,51 +11,25 @@ Aplicación Android desarrollada como tarea académica de **Aplicaciones Móvile
 | Tecnología | Versión / Uso |
 |---|---|
 | **Kotlin** | Lenguaje principal |
-| **Layouts XML** | Sin Jetpack Compose |
+| **Layouts XML** | `activity_main2.xml`, `activity_main.xml`, `item_alumno.xml` |
 | **Supabase SDK** | BOM `3.6.0` — módulo `postgrest-kt` |
-| **Ktor Client** | `3.5.0` — transporte HTTP (requerido por Supabase SDK) |
+| **Ktor Client** | `3.5.0` — cliente HTTP para Android |
 | **Kotlinx Serialization** | `1.8.1` — deserialización de modelos |
-| **Glide** | `4.16.0` — imágenes con `circleCrop()` |
+| **Glide** | `4.16.0` — carga de fotos de alumnos |
+| **Material Design 3** | `1.14.0` — componentes UI (dropdowns, diálogos) |
+| **Kotlin Coroutines** | `lifecycleScope` — operaciones asíncronas |
 | **AndroidX** | AppCompat, Activity KTX, ConstraintLayout, Core KTX |
-| **Coroutines** | `lifecycleScope.launch` — consultas asíncronas |
-
-> **Nota:** La dependencia `material` se usa solo para diálogos de error (`MaterialAlertDialogBuilder`). La UI principal de la rúbrica usa únicamente contenedores permitidos.
 
 ---
 
-## Arquitectura
+## Funcionalidades
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                      MainActivity2 (LAUNCHER)               │
-│  Spinner Semestre → Spinner Materias → ListView Alumnos     │
-└──────────────────────────┬──────────────────────────────────┘
-                           │ lifecycleScope.launch
-                           ▼
-┌─────────────────────────────────────────────────────────────┐
-│              SupabaseManager (SupaBaseManager.kt)         │
-│  BuildConfig.SUPABASE_URL / BuildConfig.SUPABASE_KEY        │
-│  createSupabaseClient → Postgrest                           │
-└──────────────────────────┬──────────────────────────────────┘
-                           │ REST (PostgREST)
-                           ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    Supabase Cloud                           │
-│  Tabla `alumnos`  (id, nombres, correo, telefono, foto)     │
-│  Tabla `materias` (id, nombre, nivel)                       │
-└─────────────────────────────────────────────────────────────┘
-
-ListView ← AlumnoAdapter ← ArrayList<Alumno>
-              └── Glide → https://sga.uteq.edu.ec + foto
-```
-
-### Flujo de datos
-
-1. Al abrir la app, `MainActivity2` consulta `alumnos` ordenados por `nombres ASC`.
-2. El `Spinner` de semestre carga opciones desde `strings.xml` (`Primero` … `Séptimo`).
-3. Al elegir semestre, se consulta `materias` filtradas por `nivel`.
-4. El `Spinner` de materias se llena con los nombres devueltos.
-5. El `ListView` muestra todos los alumnos mediante `AlumnoAdapter` (foto circular, nombre en mayúsculas, correo y teléfono con iconos).
+- **MainActivity2 como launcher** — pantalla principal al iniciar la app (`AndroidManifest.xml`).
+- **Filtro por Semestre y Materias** — `AutoCompleteTextView` con datos de `strings.xml` (niveles) y consulta dinámica a la tabla `materias` en Supabase.
+- **Lista personalizada de alumnos** — `ListView` con `AlumnoAdapter` que muestra nombre, correo, teléfono y foto circular (Glide).
+- **MainActivity (lista de alumnos en texto)** — actividad secundaria que consulta la tabla `alumnos` y muestra el resultado en un `EditText` de solo lectura.
+- **Manejo de errores** — `SupabaseErrorHandler` muestra diálogos Material ante `RestException`; `MainActivity` captura errores y los muestra en pantalla.
+- **Conexión PostgREST** — consultas `select` con filtros (`eq`) y ordenamiento (`order`) sobre tablas `alumnos` y `materias`.
 
 ---
 
@@ -85,229 +38,170 @@ ListView ← AlumnoAdapter ← ArrayList<Alumno>
 ```
 SDKSupaBase/
 ├── app/
-│   ├── build.gradle.kts              # buildConfigField desde local.properties
+│   ├── build.gradle.kts              # Configuración del módulo y dependencias
+│   ├── proguard-rules.pro
 │   └── src/main/
-│       ├── AndroidManifest.xml       # MainActivity2 = LAUNCHER
+│       ├── AndroidManifest.xml       # Permisos, actividades y launcher
 │       ├── java/com/uteq/software/app/
-│       │   ├── Adapters/AlumnoAdapter.kt
-│       │   ├── Models/Alumno.kt, Materia.kt
+│       │   ├── Adapters/
+│       │   │   └── AlumnoAdapter.kt          # Adapter ListView con Glide
+│       │   ├── Models/
+│       │   │   ├── Alumno.kt                 # Modelo serializable alumno
+│       │   │   └── Materia.kt                # Modelo serializable materia
 │       │   ├── Services/
-│       │   │   ├── SupaBaseManager.kt    # SupabaseManager singleton
-│       │   │   └── SupabaseErrorHnadler.kt
-│       │   └── Utils/MainActivity2.kt, MainActivity.kt
-│       └── res/layout/
-│           ├── activity_main2.xml    # UI principal (rúbrica)
-│           ├── activity_main.xml     # Actividad secundaria (texto plano)
-│           └── item_alumno.xml       # Ítem ListView
-├── gradle/libs.versions.toml
-├── local.properties.example          # Plantilla de credenciales (sin claves reales)
-├── local.properties                  # NO subir a Git — sdk.dir + Supabase
-├── generate_documentacion.py         # Genera Documentacion_SDKSupaBase.docx
+│       │   │   ├── SupaBaseManager.kt        # Cliente Supabase (singleton)
+│       │   │   └── SupabaseErrorHnadler.kt   # Diálogos de error
+│       │   └── Utils/
+│       │       ├── MainActivity2.kt          # Pantalla principal (launcher)
+│       │       └── MainActivity.kt           # Lista de alumnos en texto
+│       └── res/
+│           ├── layout/
+│           │   ├── activity_main2.xml        # UI principal con spinners y lista
+│           │   ├── activity_main.xml         # UI lista de alumnos (texto)
+│           │   └── item_alumno.xml           # Ítem de la lista con foto
+│           ├── values/
+│           │   ├── strings.xml               # Nombre app y array de semestres
+│           │   ├── colors.xml
+│           │   └── themes.xml
+│           ├── drawable/                     # Iconos y recursos gráficos
+│           └── xml/                          # Reglas de backup
+├── gradle/
+│   ├── libs.versions.toml            # Versiones centralizadas
+│   └── wrapper/
+├── build.gradle.kts                  # Build raíz
+├── settings.gradle.kts
+├── generate_documentacion.py         # Script para generar Documentacion_SDKSupaBase.docx
+├── EMULATOR_ADB_FIX.md               # Notas de solución de problemas con emulador
 └── README.md
 ```
 
 ---
 
-## Requisitos previos
+## Requisitos
 
 | Requisito | Valor |
 |---|---|
-| Android Studio | Ladybug o superior |
-| JDK | 11 |
-| Gradle (wrapper) | 9.4.1 |
-| AGP | 9.2.1 |
-| minSdk | 26 |
-| targetSdk / compileSdk | 36 |
-| Internet | Obligatorio (`INTERNET` en manifest) |
-| Proyecto Supabase | Tablas `alumnos` y `materias` configuradas |
+| **Android Studio** | Ladybug o superior (recomendado) |
+| **JDK** | 11 |
+| **Gradle** | 9.4.1 (wrapper incluido) |
+| **AGP** | 9.2.1 |
+| **minSdk** | 26 (Android 8.0) |
+| **targetSdk** | 36 |
+| **compileSdk** | 36 |
+| **applicationId** | `com.uteq.software.app` |
+| **Conexión a Internet** | Requerida (permiso `INTERNET` en el manifest) |
+| **Cuenta Supabase** | Proyecto configurado con tablas `alumnos` y `materias` |
 
 ---
 
-## Instalación paso a paso
+## Cómo ejecutar el proyecto
 
-### 1. Clonar o descargar
+1. **Clonar o descargar** el repositorio en tu equipo.
+2. **Abrir** la carpeta `SDKSupaBase` en Android Studio (*File → Open*).
+3. Esperar a que **Gradle Sync** finalice correctamente.
+4. Verificar que las credenciales de Supabase estén configuradas en `SupaBaseManager.kt` (ver sección siguiente).
+5. Crear o seleccionar un **emulador** (API 26 o superior) o conectar un dispositivo físico con depuración USB habilitada.
+6. Pulsar **Run ▶** (o `Shift + F10`) para compilar e instalar la app.
+7. La app abrirá **MainActivity2** con los filtros de Semestre/Materias y la lista de alumnos.
 
-```bash
-git clone <URL_DE_TU_REPOSITORIO>
-cd SDKSupaBase
-```
-
-O descargar el ZIP desde GitHub y extraerlo.
-
-### 2. Configurar `local.properties` (obligatorio)
-
-Android Studio crea `local.properties` automáticamente con `sdk.dir`. Debes **añadir** las credenciales de Supabase:
-
-```properties
-sdk.dir=C\:\\Users\\TU_USUARIO\\AppData\\Local\\Android\\Sdk
-
-SUPABASE_URL=https://TU_PROYECTO.supabase.co
-SUPABASE_KEY=TU_CLAVE_SUPABASE
-```
-
-**Opción rápida:** copiar la plantilla:
-
-```bash
-copy local.properties.example local.properties
-```
-
-Luego editar `local.properties` con tus valores reales.
-
-> **Seguridad:** `local.properties` está en `.gitignore`. **Nunca** subas claves al repositorio. Las credenciales se inyectan en compilación como `BuildConfig.SUPABASE_URL` y `BuildConfig.SUPABASE_KEY`.
-
-### 3. Abrir en Android Studio
-
-1. *File → Open* → seleccionar carpeta `SDKSupaBase`.
-2. Esperar **Gradle Sync** (descarga dependencias Supabase, Glide, etc.).
-3. Si sync falla por credenciales vacías, verificar que `SUPABASE_URL` y `SUPABASE_KEY` existen en `local.properties`.
-
-### 4. Ejecutar
-
-1. Crear emulador API 26+ o conectar dispositivo con depuración USB.
-2. Run ▶ (o `Shift+F10`).
-3. La app abre **MainActivity2** con logo, spinners y lista de alumnos.
-
-### 5. Compilar APK debug (entrega)
-
-```bash
-.\gradlew assembleDebug
-```
-
-APK generado en: `app/build/outputs/apk/debug/app-debug.apk`
-
----
-
-## Configuración Supabase
-
-### Tablas esperadas
-
-**`alumnos`**
-
-| Columna | Tipo | Uso |
-|---|---|---|
-| `id` | int | Identificador |
-| `nombres` | text | Nombre completo (orden alfabético) |
-| `correo` | text | Correo electrónico |
-| `telefono` | text | Teléfono |
-| `foto` | text | Ruta relativa en SGA (ej. `/fotos/alumno.jpg`) |
-
-**`materias`**
-
-| Columna | Tipo | Uso |
-|---|---|---|
-| `id` | int | Identificador |
-| `nombre` | text | Nombre de la materia |
-| `nivel` | int | Semestre (1=Primero … 7=Séptimo) |
-
-### Modelo Kotlin (rúbrica)
-
-```kotlin
-data class Alumno(
-    val id: Int,
-    val nombres: String,
-    val correo: String,
-    val telefono: String,
-    val foto: String
-)
-```
-
-### Cadena BuildConfig → SupabaseManager
-
-En `app/build.gradle.kts`:
-
-```kotlin
-buildFeatures { buildConfig = true }
-
-buildConfigField("String", "SUPABASE_URL", "\"${localProperties.getProperty("SUPABASE_URL", "")}\"")
-buildConfigField("String", "SUPABASE_KEY", "\"${localProperties.getProperty("SUPABASE_KEY", "")}\"")
-```
-
-En `SupaBaseManager.kt`:
-
-```kotlin
-createSupabaseClient(
-    supabaseUrl = BuildConfig.SUPABASE_URL,
-    supabaseKey = BuildConfig.SUPABASE_KEY
-) { install(Postgrest) }
-```
-
----
-
-## Publicar en GitHub
-
-1. Crear repositorio vacío en GitHub.
-2. Verificar que **no** se incluye `local.properties` (`git status` no debe listarlo).
-3. Sí incluir `local.properties.example` para que el docente sepa qué variables configurar.
-4. Subir el proyecto:
-
-```bash
-git add .
-git commit -m "Entrega SDK Supabase - Contenedores UI"
-git push -u origin master
-```
-
-5. En el README del repo (este archivo), el evaluador encontrará instalación, rúbrica y arquitectura.
-
----
-
-## Capturas de pantalla (para PDF / informe)
-
-Colocar imágenes en `docs/capturas/` con estos nombres:
-
-| Archivo | Contenido sugerido |
-|---|---|
-| `captura_01_mainactivity2.png` | Pantalla principal: logo, spinners, ListView |
-| `captura_02_lista_fotos.png` | Detalle de ítems con foto circular Glide |
-| `captura_03_filtros.png` | Spinner semestre/materia desplegado |
-| `captura_04_mainactivity.png` | MainActivity secundaria (lista texto) |
-| `captura_05_documentacion.png` | Android Studio / Supabase dashboard |
-
-Referencia en markdown (insertar tras tomar capturas):
-
-```markdown
-![MainActivity2](docs/capturas/captura_01_mainactivity2.png)
-```
-
-> El **PDF de entrega** lo genera el estudiante; el código y este README están listos para copiar al informe.
+> Si el emulador presenta problemas de conexión ADB, consultar `EMULATOR_ADB_FIX.md`.
 
 ---
 
 ## Archivos clave
 
-| Archivo | Rol |
+| Archivo | Descripción |
 |---|---|
-| `MainActivity2.kt` | Launcher: spinners, consulta async, ListView |
-| `AlumnoAdapter.kt` | `ArrayAdapter<Alumno>` + Glide `circleCrop()` |
-| `Alumno.kt` | Data class según rúbrica |
-| `SupaBaseManager.kt` | Cliente Supabase con `BuildConfig` |
-| `activity_main2.xml` | Layout principal rúbrica |
-| `item_alumno.xml` | Layout ítem: foto, nombre, correo, teléfono, iconos |
-| `app/build.gradle.kts` | `buildConfigField` + dependencias |
-| `local.properties.example` | Plantilla sin secretos |
+| `AndroidManifest.xml` | Declara `MainActivity2` como LAUNCHER y `MainActivity` como secundaria |
+| `MainActivity2.kt` | Lógica principal: carga alumnos/materias, spinners y ListView |
+| `MainActivity.kt` | Consulta todos los alumnos y los muestra en formato texto |
+| `SupaBaseManager.kt` | Singleton `SupabaseManager` — URL y API key del proyecto |
+| `SupabaseErrorHnadler.kt` | Muestra `MaterialAlertDialogBuilder` ante errores REST |
+| `AlumnoAdapter.kt` | Adapter personalizado con Glide para fotos circulares |
+| `Alumno.kt` / `Materia.kt` | Modelos `@Serializable` para PostgREST |
+| `activity_main2.xml` | Layout principal: logo, dropdowns Semestre/Materias, ListView |
+| `activity_main.xml` | Layout secundario: EditText + indicador de progreso |
+| `item_alumno.xml` | Layout de cada ítem: ImageView + TextViews de datos |
+| `strings.xml` | Array `niveles` (Primero … Séptimo) para el spinner de semestre |
+| `app/build.gradle.kts` | Dependencias Supabase, Glide, Material y configuración SDK |
 
 ---
 
-## Documentación Word (opcional)
+## Configuración de Supabase
 
-Informe técnico para entrega:
+Las credenciales del proyecto se configuran en:
 
-```bash
-pip install python-docx
-python generate_documentacion.py
+```
+app/src/main/java/com/uteq/software/app/Services/SupaBaseManager.kt
 ```
 
-Genera `Documentacion_SDKSupaBase.docx`. **Regenerar** tras cambios importantes (Spinner, BuildConfig) para que el Word refleje el código actual.
+Dentro del objeto `SupabaseManager`, asignar:
+
+- `supabaseUrl` — URL del proyecto en el panel de Supabase.
+- `supabaseKey` — clave pública (`anon` key) del proyecto.
+
+> **Importante:** No incluir claves reales en repositorios públicos. Usar variables de entorno, `local.properties` o un archivo ignorado por `.gitignore` en entregas de producción. Para la tarea académica, solicitar las credenciales al docente o configurarlas localmente antes de ejecutar.
+
+El cliente instala únicamente el módulo **Postgrest** (sin autenticación). Las tablas esperadas son:
+
+| Tabla | Campos principales |
+|---|---|
+| `alumnos` | `id`, `nombres`, `correo`, `telefono`, `paralelo`, `foto` |
+| `materias` | `id`, `nombre`, `nivel` |
+
+Las fotos se cargan desde `https://sga.uteq.edu.ec` + ruta almacenada en el campo `foto`.
 
 ---
 
-## Solución de problemas
+## Capturas de pantalla
 
-| Problema | Solución |
-|---|---|
-| Lista vacía / error REST | Verificar `SUPABASE_URL` y `SUPABASE_KEY` en `local.properties`; re-sync Gradle |
-| Fotos no cargan | Comprobar campo `foto` y conectividad a `https://sga.uteq.edu.ec` |
-| Gradle sync falla | JDK 11, Android SDK 36 instalado |
-| Emulador ADB | Ver `EMULATOR_ADB_FIX.md` |
+> Insertar aquí las capturas del emulador o dispositivo físico.
+
+### Captura 1 — Pantalla principal MainActivity2
+
+![Captura 1 — MainActivity2](docs/capturas/captura_01_mainactivity2.png)
+
+*Vista inicial con logo UTEQ, selector de Semestre, selector de Materias y ListView de alumnos.*
+
+---
+
+### Captura 2 — Lista de alumnos con fotos
+
+![Captura 2 — Lista con fotos](docs/capturas/captura_02_lista_fotos.png)
+
+*Ítems personalizados con foto circular (Glide), nombre en mayúsculas, correo y teléfono.*
+
+---
+
+### Captura 3 — Filtro por Semestre y Materias
+
+![Captura 3 — Filtros](docs/capturas/captura_03_filtros.png)
+
+*Dropdowns de Semestre y Materias filtrando datos desde Supabase por nivel.*
+
+---
+
+### Captura 4 — MainActivity (lista alumnos)
+
+![Captura 4 — MainActivity](docs/capturas/captura_04_mainactivity.png)
+
+*Actividad secundaria con listado de alumnos en formato texto plano.*
+
+---
+
+### Captura 5 — Documentación / diseño referencia
+
+![Captura 5 — Documentación](docs/capturas/captura_05_documentacion.png)
+
+*Referencia al proyecto docente ContenedoresUI_Supabase y documentación de la tarea.*
+
+---
+
+## Paquete de la aplicación
+
+```
+com.uteq.software.app
+```
 
 ---
 
@@ -315,18 +209,35 @@ Genera `Documentacion_SDKSupaBase.docx`. **Regenerar** tras cambios importantes 
 
 | Campo | Dato |
 |---|---|
-| **Estudiante** | [Nombre completo] |
+| **Estudiante** | [Nombre completo del estudiante] |
 | **Carrera** | Ingeniería en Software |
-| **Universidad** | UTEQ |
+| **Universidad** | Universidad Técnica Estatal de Quevedo (UTEQ) |
 | **Asignatura** | Aplicaciones Móviles |
-| **Semestre** | 6.º — 2026 |
+| **Semestre** | 6.º semestre — 2026 |
+
+---
+
+## Documentación adicional
+
+El informe técnico completo del proyecto se encuentra en:
+
+📄 **[Documentacion_SDKSupaBase.docx](./Documentacion_SDKSupaBase.docx)**
+
+> Si el archivo aún no existe, generarlo ejecutando:
+>
+> ```bash
+> pip install python-docx
+> python generate_documentacion.py
+> ```
+
+El script `generate_documentacion.py` compila automáticamente el código fuente, dependencias y descripción del proyecto en un documento Word listo para entrega.
 
 ---
 
 ## Referencia docente
 
-Basado en **ContenedoresUI_Supabase** — proyecto de referencia del docente para contenedores UI con Supabase en Android.
+Proyecto base: **ContenedoresUI_Supabase** — implementación de referencia del docente para contenedores UI con integración Supabase en Android.
 
 ---
 
-*Proyecto académico — UTEQ · Aplicaciones Móviles · 2026*
+*Proyecto académico — Universidad Técnica Estatal de Quevedo (UTEQ) · Aplicaciones Móviles · 2026*
